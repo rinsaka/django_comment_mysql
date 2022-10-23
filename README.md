@@ -74,3 +74,86 @@ mysql>
 $ conda install mysqlclient
 $ conda install PyMySQL
 ~~~
+
+## MySQL server
+- 他のクライアントからの接続を許可する
+
+~~~
+sudo vi /etc/mysql/mysql.conf.d/mysqld.cnf
+~~~
+
+- 次の行を探してコメントアウトする
+
+~~~
+bind-address = 127.0.0.1
+~~~
+
+~~~
+vagrant@ubuntu2204:~/Documents/django$ mysql -u root -p
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 104
+Server version: 8.0.30-0ubuntu0.22.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> CREATE USER 'comments_user'@'192.168.56.100' IDENTIFIED BY 'xxxx';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> GRANT ALL PRIVILEGES ON django_comments.* TO 'comments_user'@'192.168.56.100';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> CREATE USER 'remote_user'@'%' IDENTIFIED BY 'xxxx';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> GRANT ALL PRIVILEGES ON django_comments.* TO 'remote_user'@'%';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql>
+mysql> FLUSH PRIVILEGES;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> exit
+Bye
+~~~
+
+- クライアントから接続する
+
+~~~
+vagrant@ubuntu2204:~/Documents$ mysql -h 192.168.56.101 -u comments_user -p
+Enter password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 12
+Server version: 8.0.30-0ubuntu0.22.04.1 (Ubuntu)
+
+Copyright (c) 2000, 2022, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| django_comments    |
+| information_schema |
+| performance_schema |
++--------------------+
+3 rows in set (0.00 sec)
+
+mysql> exit
+Bye
+vagrant@ubuntu2204:~/Documents$
+~~~
+
+
+
