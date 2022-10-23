@@ -51,7 +51,15 @@ class UpdateCommentView(UpdateView):
         context['form_name'] = 'コメントの更新'
         context['button_label'] = 'コメントを更新する'
         return context
+    def form_valid(self, form):
+        self.object = comment = form.save()
+        messages.success(self.request, 'コメントを更新しました')
+        return redirect(self.get_success_url())
 
 class DeleteCommentView(DeleteView):
     model = Comment
     success_url = reverse_lazy('comments:index')
+
+    def form_valid(self, form):
+        messages.success(self.request, 'コメントを削除しました')
+        return super().form_valid(form)
