@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}
+コメント削除
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h1 class="my-5">コメントを削除しますか</h1>
+    <form method="POST">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-primary">削除する</button>
+    </form>
+    <hr>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            ID : {{ comment.id }}
+        </div>
+        <div class="card-body">
+            <p class="card-text">Title : </p>
+            <h5 class="card-title">{{ comment.title }}</h5>
+            <p class="card-text">Body : </p>
+            <p class="card-text">{{ comment.body }}</p>
+        </div>
+        <div class="card-footer">
+            Created at : {{ comment.created_at }}<br>
+            Updated at : {{ comment.updated_at }}
+        </div>
+    </div>
+  </div>
+{% endblock content %}
