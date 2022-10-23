@@ -68,3 +68,9 @@ Query OK, 0 rows affected (0.00 sec)
 mysql>
 ~~~
 
+- conda install
+    - pip ではエラーになるので注意
+~~~
+$ conda install mysqlclient
+$ conda install PyMySQL
+~~~
